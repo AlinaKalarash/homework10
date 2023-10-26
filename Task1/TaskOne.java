@@ -5,84 +5,34 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TaskOne {
 
-    public static void main(String[] args) throws IOException {
+   public static void main(String[] args) throws IOException {
         File file = new File("files/file.txt");
 
         InputStream fis = new FileInputStream(file);
 
         Scanner s = new Scanner(fis);
 
+        Pattern pattern = Pattern.compile("\\(\\d{3}\\) \\d{3}-\\d{4}");
+
+        Pattern pattern1 = Pattern.compile("\\d{3}-\\d{3}-\\d{4}");
+
         while (s.hasNextLine()) {
             String phoneNumber = s.nextLine();
-            if (isValid(phoneNumber) || isValid1(phoneNumber)) {
+            Matcher matcher = pattern.matcher(phoneNumber);
+            Matcher matcher1 = pattern1.matcher(phoneNumber);
+            if (matcher.find() || matcher1.find()) {
                 System.out.println(phoneNumber);
             }
 
         }
-
-
+        
         fis.close();
         s.close();
-    }
-
-
-
-    //xxx-xxx-xxxx
-    public static boolean isValid(String phoneNumber) {
-        String[] parts = phoneNumber.split("-");
-
-        if (parts.length != 3) {
-            return false;
-        }
-        if (parts[0].length() != 3 || parts[1].length() != 3 || parts[2].length() != 4) {
-            return false;
-        }
-
-        for (String part : parts) {
-
-            for (char c : part.toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-
-
-    //(xxx) xxx-xxxx
-    public static boolean isValid1(String phoneNumber) {
-        String[] parts = phoneNumber.split(" ");
-
-        for (int i = 0; i < parts[0].toCharArray().length; i++) {
-            char[] c = parts[0].toCharArray();
-            if (c[0] != '(' || !Character.isDigit(c[1]) || !Character.isDigit(c[2]) || !Character.isDigit(c[3]) || c[4] != ')') {
-                return false;
-            }
-
-        }
-        String[] partsOfParts = parts[1].split("-");
-        if (partsOfParts.length != 2) {
-            return false;
-        }
-        if (partsOfParts[0].length() != 3 || partsOfParts[1].length() != 4) {
-            return false;
-        }
-        for (String part : partsOfParts) {
-
-            for (char c : part.toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 
 }
