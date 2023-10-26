@@ -2,6 +2,7 @@ package Task3;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TaskThree {
     public static void main(String[] args) throws IOException {
@@ -30,10 +31,15 @@ public class TaskThree {
             }
         }
 
-        for (Map.Entry<String, Integer> entry : stringCountMap.entrySet()) {
+        Map<String, Integer> sortedMap = stringCountMap.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+
+        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue());
         }
-
 
         fis.close();
         s.close();
